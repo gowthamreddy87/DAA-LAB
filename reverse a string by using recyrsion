@@ -1,0 +1,11 @@
+def reverse_string(s):
+    """Recursively reverse the given string."""
+    if len(s) == 0:
+        return s
+    else:
+        return s[-1] + reverse_string(s[:-1])
+
+# Example usage
+original_string = input("Enter the string to reverse: ")
+reversed_string = reverse_string(original_string)
+print(f"The reversed string is: {reversed_string}")
