@@ -1,0 +1,22 @@
+def count_digits(num):
+    if num == 0:
+        return 1
+    return len(str(num))
+def sum_of_powers(num, power):
+    def helper(n, power):
+        if n == 0:
+            return 0
+        else:
+            digit = n % 10
+            return digit ** power + helper(n // 10, power)
+    return helper(num, power)
+def is_armstrong(num):
+    if num < 0:
+        return False
+    power = count_digits(num)
+    return num == sum_of_powers(num, power)
+number = int(input("Enter a number: "))
+if is_armstrong(number):
+    print(f"{number} is an Armstrong number.")
+else:
+    print(f"{number} is not an Armstrong number.")
