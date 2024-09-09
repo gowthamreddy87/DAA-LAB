@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Comparator function for qsort
+int cmp(const void *a, const void *b) {
+    return (*(char *)a - *(char *)b);
+}
+
+// Function to check if s1 can break s2 or vice versa
+int canBreak(const char *s1, const char *s2) {
+    int len = strlen(s1);
+    
+    // Copy and sort s1 and s2
+    char *sorted_s1 = (char *)malloc(len + 1);
+    char *sorted_s2 = (char *)malloc(len + 1);
+    
+    strcpy(sorted_s1, s1);
+    strcpy(sorted_s2, s2);
+    
+    qsort(sorted_s1, len, sizeof(char), cmp);
+    qsort(sorted_s2, len, sizeof(char), cmp);
+    
+    // Check if sorted_s1 can break sorted_s2
+    int can_break_s2 = 1;
+    int can_break_s1 = 1;
+    
+    for (int i = 0; i < len; i++) {
+        if (sorted_s1[i] < sorted_s2[i]) {
+            can_break_s2 = 0;
+        }
+        if (sorted_s2[i] < sorted_s1[i]) {
+            can_break_s1 = 0;
+        }
+    }
+    
+    free(sorted_s1);
+    free(sorted_s2);
+    
+    return can_break_s2 || can_break_s1;
+}
+
+int main() {
+    char s1[] = "abc";
+    char s2[] = "xzy";
+    
+    if (canBreak(s1, s2)) {
+        printf("One string can break the other.\n");
+    } else {
+        printf("Neither string can break the other.\n");
+    }
+    
+    return 0;
+}
