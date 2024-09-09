@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+// Function to remove the first occurrence of each character in s
+char* performRemoval(char* s) {
+    int len = strlen(s);
+    char *result = (char *)malloc(len + 1);
+    int resultIndex = 0;
+    
+    for (char ch = 'a'; ch <= 'z'; ch++) {
+        for (int i = 0; i < len; i++) {
+            if (s[i] == ch) {
+                // Skip this character
+                break;
+            }
+            result[resultIndex++] = s[i];
+        }
+    }
+    
+    // Null terminate the result
+    result[resultIndex] = '\0';
+    return result;
+}
+
+// Function to get the string just before the last operation
+char* getStringBeforeLastOperation(char* s) {
+    char *current = strdup(s); // Copy of the original string
+    char *next;
+    
+    while (strlen(current) > 0) {
+        next = performRemoval(current);
+        free(current);
+        current = next;
+    }
+    
+    return next; // Return the string just before the last removal
+}
+
+int main() {
+    char s[] = "aabcbbca";
+    char* result = getStringBeforeLastOperation(s);
+    
+    printf("The string right before the last operation is: %s\n", result);
+    
+    free(result);
+    return 0;
+}
