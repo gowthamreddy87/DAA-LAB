@@ -1,0 +1,30 @@
+def meet_in_the_middle(arr, target):
+    from itertools import combinations
+
+    def subset_sums(arr):
+        sums = set()
+        for r in range(len(arr) + 1):
+            for comb in combinations(arr, r):
+                sums.add(sum(comb))
+        return sums
+
+    # Split the array into two halves
+    mid = len(arr) // 2
+    left_part = arr[:mid]
+    right_part = arr[mid:]
+
+    # Compute all possible subset sums for each half
+    left_sums = subset_sums(left_part)
+    right_sums = subset_sums(right_part)
+
+    # Check if there exists a pair of sums (one from each half) that add up to the target
+    for l_sum in left_sums:
+        if (target - l_sum) in right_sums:
+            return True
+    return False
+
+# Example usage
+if __name__ == "__main__":
+    arr = [3, 34, 4, 12, 5, 2]
+    target = 9
+    print(f"Is there a subset with sum {target}? {meet_in_the_middle(arr, target)}")
