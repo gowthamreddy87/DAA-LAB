@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <limits.h>
+
+// Function to compute the maximum subarray sum using Kadane's Algorithm
+int kadane(int* nums, int numsSize) {
+    int max_sum = INT_MIN;
+    int current_sum = 0;
+    
+    for (int i = 0; i < numsSize; i++) {
+        current_sum = (current_sum > 0) ? (current_sum + nums[i]) : nums[i];
+        if (current_sum > max_sum) {
+            max_sum = current_sum;
+        }
+    }
+    
+    return max_sum;
+}
+
+// Function to compute the minimum subarray sum using Kadane's Algorithm
+int kadaneMin(int* nums, int numsSize) {
+    int min_sum = INT_MAX;
+    int current_sum = 0;
+    
+    for (int i = 0; i < numsSize; i++) {
+        current_sum = (current_sum < 0) ? (current_sum + nums[i]) : nums[i];
+        if (current_sum < min_sum) {
+            min_sum = current_sum;
+        }
+    }
+    
+    return min_sum;
+}
+
+// Function to find the maximum sum of a non-empty subarray in a circular array
+int maxSubarraySumCircular(int* nums, int numsSize) {
+    if (numsSize == 0) return 0; // Handle edge case
+    
+    // Compute the maximum subarray sum for the non-circular case
+    int max_kadane = kadane(nums, numsSize);
+    
+    // Compute the total sum of the array
+    int total_sum = 0;
+    for (int i = 0; i < numsSize; i++) {
+        total_sum += nums[i];
+    }
+    
+    // Compute the minimum subarray sum
+    int min_kadane = kadaneMin(nums, numsSize);
+    
+    // If all numbers are negative, the circular subarray sum is the same as max_kadane
+    if (total_sum == min_kadane) {
+        return max_kadane;
+    }
+    
+    // Compute the maximum subarray sum for the circular case
+    int max_circular = total_sum - min_kadane;
+    
+    // Return the maximum of both cases
+    return (max_kadane > max_circular) ? max_kadane : max_circular;
+}
+
+int main() {
+    int nums[] = {5, -3, 5};
+    int numsSize = sizeof(nums) / sizeof(nums[0]);
+    
+    int result = maxSubarraySumCircular(nums, numsSize);
+    printf("The maximum sum of a non-empty subarray in a circular array is: %d\n", result);
+    
+    return 0;
+}
