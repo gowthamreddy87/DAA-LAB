@@ -1,0 +1,60 @@
+def median_of_medians(arr, k):
+    def partition(arr, low, high, pivot_index):
+        pivot_value = arr[pivot_index]
+        # Move pivot to end
+        arr[pivot_index], arr[high] = arr[high], arr[pivot_index]
+        store_index = low
+        # Move all smaller elements to the left of pivot
+        for i in range(low, high):
+            if arr[i] < pivot_value:
+                arr[store_index], arr[i] = arr[i], arr[store_index]
+                store_index += 1
+        # Move pivot to its final place
+        arr[high], arr[store_index] = arr[store_index], arr[high]
+        return store_index
+
+    def median_of_medians_helper(arr, low, high):
+        if high - low + 1 <= 5:
+            # Base case: sort and return median
+            subarray = arr[low:high + 1]
+            subarray.sort()
+            return subarray[len(subarray) // 2]
+
+        # Divide arr into groups of 5
+        medians = []
+        for i in range(low, high + 1, 5):
+            sublow = i
+            subhigh = min(i + 4, high)
+            median = median_of_medians_helper(arr, sublow, subhigh)
+            medians.append(median)
+        
+        # Find the median of medians
+        return median_of_medians_helper(medians, 0, len(medians) - 1)
+    
+    def select(arr, low, high, k):
+        if low == high:
+            return arr[low]
+        
+        # Find the pivot element
+        pivot_index = median_of_medians_helper(arr, low, high)
+        pivot_index = arr.index(pivot_index)
+        
+        # Partition the array around the pivot
+        pivot_index = partition(arr, low, high, pivot_index)
+        
+        # Select the k-th element based on the pivot position
+        if k == pivot_index:
+            return arr[k]
+        elif k < pivot_index:
+            return select(arr, low, pivot_index - 1, k)
+        else:
+            return select(arr, pivot_index + 1, high, k)
+
+    # Find the k-th smallest element in the array
+    return select(arr, 0, len(arr) - 1, k)
+
+# Example usage
+if __name__ == "__main__":
+    arr = [3, 2, 1, 5, 6, 4]
+    k = 2  # Find the 2nd smallest element (0-indexed, so it’s the 3rd smallest element)
+    print(f"The {k + 1}-th smallest element is: {median_of_medians(arr, k)}")
