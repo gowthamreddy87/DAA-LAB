@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Function to minimize the total value of the string
+int minimizeValue(char* s) {
+    int freq[26] = {0}; // Frequency of each character a-z
+    int totalCost = 0;
+    int len = strlen(s);
+    
+    for (int i = 0; i < len; i++) {
+        if (s[i] == '?') {
+            // Find the best character to replace '?'
+            int minCost = len; // Initialize to a large number
+            char bestChar = 'a';
+            
+            // Try each character from 'a' to 'z'
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                int cost = freq[ch - 'a'];
+                if (cost < minCost) {
+                    minCost = cost;
+                    bestChar = ch;
+                }
+            }
+            
+            // Replace '?' with the best character
+            s[i] = bestChar;
+            // Update total cost
+            totalCost += freq[bestChar - 'a'];
+            // Update frequency
+            freq[bestChar - 'a']++;
+        } else {
+            // Update cost and frequency for the current character
+            totalCost += freq[s[i] - 'a'];
+            freq[s[i] - 'a']++;
+        }
+    }
+    
+    return totalCost;
+}
+
+int main() {
+    char s[] = "a?b?c?";
+    printf("Minimum value of the string: %d\n", minimizeValue(s));
+    return 0;
+}
