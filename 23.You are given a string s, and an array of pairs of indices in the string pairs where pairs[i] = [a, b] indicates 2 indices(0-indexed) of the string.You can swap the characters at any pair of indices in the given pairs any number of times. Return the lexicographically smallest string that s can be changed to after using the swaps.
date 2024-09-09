@@ -1,0 +1,45 @@
+from collections import defaultdict, deque
+
+def smallest_lexicographical_string(s, pairs):
+    # Build the graph
+    graph = defaultdict(list)
+    for a, b in pairs:
+        graph[a].append(b)
+        graph[b].append(a)
+    
+    # Find all connected components
+    visited = [False] * len(s)
+    components = []
+    
+    def bfs(start):
+        queue = deque([start])
+        component = []
+        while queue:
+            node = queue.popleft()
+            if not visited[node]:
+                visited[node] = True
+                component.append(node)
+                for neighbor in graph[node]:
+                    if not visited[neighbor]:
+                        queue.append(neighbor)
+        return component
+    
+    for i in range(len(s)):
+        if not visited[i]:
+            component = bfs(i)
+            components.append(component)
+    
+    # Sort each component's characters and place them back in sorted order
+    s_list = list(s)
+    for component in components:
+        chars = [s_list[i] for i in component]
+        chars.sort()
+        for i, index in enumerate(sorted(component)):
+            s_list[index] = chars[i]
+    
+    return ''.join(s_list)
+
+# Example usage
+s = "dcab"
+pairs = [[0, 3], [1, 2]]
+print(smallest_lexicographical_string(s, pairs))  # Output: "bacd"
