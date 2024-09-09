@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Definition for a binary tree node.
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+// Function to create a new tree node
+TreeNode* createNode(int value) {
+    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
+    node->val = value;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
+}
+
+// Function to find the index of the maximum value in a subarray
+int findMaxIndex(int* nums, int left, int right) {
+    int maxIndex = left;
+    for (int i = left; i <= right; i++) {
+        if (nums[i] > nums[maxIndex]) {
+            maxIndex = i;
+        }
+    }
+    return maxIndex;
+}
+
+// Recursive function to construct the maximum binary tree
+TreeNode* constructMaximumBinaryTree(int* nums, int left, int right) {
+    if (left > right) {
+        return NULL;
+    }
+    
+    // Find the index of the maximum element in the current subarray
+    int maxIndex = findMaxIndex(nums, left, right);
+    
+    // Create the root node with the maximum value
+    TreeNode* root = createNode(nums[maxIndex]);
+    
+    // Recursively construct the left and right subtrees
+    root->left = constructMaximumBinaryTree(nums, left, maxIndex - 1);
+    root->right = constructMaximumBinaryTree(nums, maxIndex + 1, right);
+    
+    return root;
+}
+
+// Utility function to print the tree (in-order traversal)
+void printInOrder(TreeNode* root) {
+    if (root != NULL) {
+        printInOrder(root->left);
+        printf("%d ", root->val);
+        printInOrder(root->right);
+    }
+}
+
+// Utility function to free the tree nodes
+void freeTree(TreeNode* root) {
+    if (root != NULL) {
+        freeTree(root->left);
+        freeTree(root->right);
+        free(root);
+    }
+}
+
+int main() {
+    int nums[] = {3, 2, 1, 6, 0, 5};
+    int numsSize = sizeof(nums) / sizeof(nums[0]);
+    
+    TreeNode* root = constructMaximumBinaryTree(nums, 0, numsSize - 1);
+    
+    printf("In-order traversal of the constructed tree: ");
+    printInOrder(root);
+    printf("\n");
+    
+    // Free the allocated memory for the tree
+    freeTree(root);
+    
+    return 0;
+}
