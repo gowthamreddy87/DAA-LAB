@@ -1,0 +1,40 @@
+def karatsuba(x, y):
+    # Convert x and y to strings to handle their length
+    x_str = str(x)
+    y_str = str(y)
+    
+    # Base case for recursion
+    if len(x_str) == 1 or len(y_str) == 1:
+        return x * y
+    
+    # Find the size of the numbers
+    max_len = max(len(x_str), len(y_str))
+    half_len = max_len // 2
+    
+    # Split the numbers into halves
+    x_str = x_str.zfill(max_len)
+    y_str = y_str.zfill(max_len)
+    
+    x1 = int(x_str[:-half_len])
+    x0 = int(x_str[-half_len:])
+    y1 = int(y_str[:-half_len])
+    y0 = int(y_str[-half_len:])
+    
+    # Recursive calls to compute the three products
+    z0 = karatsuba(x0, y0)
+    z1 = karatsuba(x1, y1)
+    z2 = karatsuba(x0 + x1, y0 + y1) - z0 - z1
+    
+    # Combine the results
+    result = z1 * 10**(2 * half_len) + z2 * 10**(half_len) + z0
+    
+    return result
+
+# Example usage
+if __name__ == "__main__":
+    x = 1234
+    y = 5678
+    
+    print(f"Multiplication of {x} and {y} using Karatsuba's algorithm:")
+    result = karatsuba(x, y)
+    print(result)
