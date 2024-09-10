@@ -1,0 +1,23 @@
+from collections import OrderedDict
+
+class FirstUnique:
+
+    def __init__(self, nums):
+        self.queue = OrderedDict()
+        self.unique = {}
+        for num in nums:
+            self.add(num)
+
+    def showFirstUnique(self):
+        if self.queue:
+            return next(iter(self.queue.values()))
+        return -1
+
+    def add(self, value):
+        if value in self.unique:
+            if self.unique[value]:
+                self.queue.pop(value)
+                self.unique[value] = False
+        else:
+            self.queue[value] = value
+            self.unique[value] = True
