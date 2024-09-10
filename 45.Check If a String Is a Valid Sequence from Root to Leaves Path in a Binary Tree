@@ -1,0 +1,9 @@
+def isValidSequence(root, arr):
+    def check(node, i):
+        if not node or i == len(arr) or node.val != arr[i]:
+            return False
+        if not node.left and not node.right:
+            return i == len(arr) - 1
+        return check(node.left, i + 1) or check(node.right, i + 1)
+    
+    return check(root, 0)
