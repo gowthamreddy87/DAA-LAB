@@ -1,0 +1,13 @@
+# Sort Characters By Frequency
+
+from collections import Counter
+
+def frequencySort(s: str) -> str:
+    freq = Counter(s)
+    sorted_chars = sorted(freq.keys(), key=lambda x: -freq[x])
+    return ''.join(char * freq[char] for char in sorted_chars)
+
+# Example usage
+s = "tree"
+output = frequencySort(s)
+print(output)  # Output can be "eert" or "eetr"
