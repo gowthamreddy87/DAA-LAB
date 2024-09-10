@@ -1,0 +1,26 @@
+def diagonalSort(mat):
+    from collections import defaultdict
+    import numpy as np
+
+    diagonals = defaultdict(list)
+    m, n = len(mat), len(mat[0])
+
+    for i in range(m):
+        for j in range(n):
+            diagonals[i - j].append(mat[i][j])
+
+    for key in diagonals:
+        diagonals[key].sort()
+
+    result = np.zeros((m, n), dtype=int)
+
+    for i in range(m):
+        for j in range(n):
+            result[i][j] = diagonals[i - j].pop(0)
+
+    return result
+
+# Example usage
+matrix = [[3, 3, 1, 1], [2, 2, 1, 2], [1, 1, 1, 2]]
+sorted_matrix = diagonalSort(matrix)
+print(sorted_matrix)
