@@ -1,0 +1,14 @@
+# Counting Elements
+
+def count_elements(arr):
+    count = 0
+    arr_set = set(arr)
+    for x in arr:
+        if x + 1 in arr_set:
+            count += 1
+    return count
+
+# Example usage
+arr = [1, 2, 3, 2, 3, 4]
+result = count_elements(arr)
+print(result)  # Output: 5
