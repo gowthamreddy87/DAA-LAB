@@ -1,0 +1,20 @@
+class BinaryMatrix:
+    def get(self, row: int, col: int) -> int:
+        pass
+
+    def dimensions(self) -> list:
+        pass
+
+def leftMostColumnWithOne(binaryMatrix: BinaryMatrix) -> int:
+    rows, cols = binaryMatrix.dimensions()
+    leftmost_col = cols
+    row, col = 0, cols - 1
+
+    while row < rows and col >= 0:
+        if binaryMatrix.get(row, col) == 1:
+            leftmost_col = col
+            col -= 1
+        else:
+            row += 1
+
+    return leftmost_col if leftmost_col < cols else -1
