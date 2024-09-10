@@ -1,0 +1,29 @@
+from collections import defaultdict
+
+def numberWays(hats):
+    MOD = 10**9 + 7
+    n = len(hats)
+    hat_to_people = defaultdict(list)
+    for i in range(n):
+        for hat in hats[i]:
+            hat_to_people[hat].append(i)
+
+    dp = [0] * (1 << n)
+    dp[0] = 1
+
+    for hat in range(1, 41):
+        new_dp = dp[:]
+        for state in range(1 << n):
+            for person in hat_to_people.get(hat, []):
+                if state & (1 << person):
+                    continue
+                new_state = state | (1 << person)
+                new_dp[new_state] += dp[state]
+                new_dp[new_state] %= MOD
+        dp = new_dp
+
+    return dp[(1 << n) - 1]
+
+# Example
+hats = [[3, 4], [4, 5], [5]]
+print(numberWays(hats))  # Output: 1
