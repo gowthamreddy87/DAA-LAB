@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <float.h>
+
+typedef struct {
+    int node;
+    double prob;
+} Edge;
+
+typedef struct {
+    int a, b;
+    double prob;
+} GraphEdge;
+
+double maxProbability(int n, GraphEdge* edges, double* succProb, int edgesSize, int start, int end) {
+    Edge* graph[n];
+    for (int i = 0; i < n; i++) {
+        graph[i] = (Edge*)malloc(n * sizeof(Edge));
+        for (int j = 0; j < n; j++) {
+            graph[i][j].node = -1;
+            graph[i][j].prob = 0.0;
+        }
+    }
+
+    for (int i = 0; i < edgesSize; i++) {
+        int a = edges[i].a;
+        int b = edges[i].b;
+        graph[a][b].node = b;
+        graph[a][b].prob = succProb[i];
+        graph[b][a].node = a;
+        graph[b][a].prob = succProb[i];
+    }
+
+    double* maxProb = (double*)malloc(n * sizeof(double));
+    for (int i = 0; i < n; i++) {
+        maxProb[i] = 0.0;
+    }
+    maxProb[start] = 1.0;
+
+    int* visited = (int*)malloc(n * sizeof(int));
+    memset(visited, 0, n * sizeof(int));
+
+    for (int i = 0; i < n; i++) {
+        int curr = -1;
+        for (int j = 0; j < n; j++) {
+            if (!visited[j] && (curr == -1 || maxProb[j] > maxProb[curr])) {
+                curr = j;
+            }
+        }
+        if (curr == -1 || maxProb[curr] == 0.0) break;
+        visited[curr] = 1;
+
+        for (int j = 0; j < n; j++) {
+            if (graph[curr][j].node != -1) {
+                double newProb = maxProb[curr] * graph[curr][j].prob;
+                if (newProb > maxProb[j]) {
+                    maxProb[j] = newProb;
+                }
+            }
+        }
+    }
+
+    double result = maxProb[end];
+    free(maxProb);
+    free(visited);
+    for (int i = 0; i < n; i++) {
+        free(graph[i]);
+    }
+    return result;
+}
+
+int main() {
+    int n = 3;
+    GraphEdge edges[] = {{0, 1}, {1, 2}, {0, 2}};
+    double succProb[] = {0.5, 0.5, 0.2};
+    int start = 0, end = 2;
+    double result = maxProbability(n, edges, succProb, sizeof(edges) / sizeof(edges[0]), start, end);
+    printf("%.5f\n", result);
+    return 0;
+}
