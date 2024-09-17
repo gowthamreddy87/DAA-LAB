@@ -1,0 +1,9 @@
+def destCity(paths):
+    start_cities = {cityA for cityA, cityB in paths}
+    for cityA, cityB in paths:
+        if cityB not in start_cities:
+            return cityB
+
+# Example usage
+paths = [["London","New York"],["New York","Lima"],["Lima","Sao Paulo"]]
+print(destCity(paths))  # Output: "Sao Paulo"
