@@ -1,0 +1,48 @@
+# Floyd's Algorithm Implementation
+
+def floyd_warshall(n, edges):
+    # Initialize distance matrix
+    dist = [[float('inf')] * n for _ in range(n)]
+    
+    for i in range(n):
+        dist[i][i] = 0
+        
+    for u, v, w in edges:
+        dist[u][v] = min(dist[u][v], w)
+        dist[v][u] = min(dist[v][u], w)  # If the graph is undirected
+
+    # Display distance matrix before applying the algorithm
+    print("Distance matrix before applying Floyd's Algorithm:")
+    for row in dist:
+        print(row)
+
+    # Floyd-Warshall algorithm
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][j] > dist[i][k] + dist[k][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+
+    # Display distance matrix after applying the algorithm
+    print("\nDistance matrix after applying Floyd's Algorithm:")
+    for row in dist:
+        print(row)
+
+    return dist
+
+def shortest_path(dist, start, end):
+    return dist[start][end]
+
+# Test case
+n = 4
+edges = [[0, 1, 3], [1, 2, 1], [1, 3, 4], [2, 3, 1]]
+distance_threshold = 4
+
+# Execute Floyd's Algorithm
+distance_matrix = floyd_warshall(n, edges)
+
+# Identify and print the shortest path from City 1 to City 3
+start_city = 1
+end_city = 3
+shortest_distance = shortest_path(distance_matrix, start_city, end_city)
+print(f"\nCity {start_city + 1} to City {end_city + 1} = {shortest_distance}")
