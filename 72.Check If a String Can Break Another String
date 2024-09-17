@@ -1,0 +1,13 @@
+def can_break(s1: str, s2: str) -> bool:
+    s1_sorted = sorted(s1)
+    s2_sorted = sorted(s2)
+    
+    def can_break_helper(a: str, b: str) -> bool:
+        return all(x >= y for x, y in zip(a, b))
+    
+    return can_break_helper(s1_sorted, s2_sorted) or can_break_helper(s2_sorted, s1_sorted)
+
+# Example usage
+s1 = "abc"
+s2 = "xya"
+print(can_break(s1, s2))  # Output: True
