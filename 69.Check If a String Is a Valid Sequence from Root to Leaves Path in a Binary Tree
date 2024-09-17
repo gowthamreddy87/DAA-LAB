@@ -1,0 +1,38 @@
+#  Check If a String Is a Valid Sequence from Root to Leaves Path in a Binary Tree
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def isValidSequence(root: TreeNode, arr: list[int]) -> bool:
+    def dfs(node, index):
+        if not node:
+            return index == len(arr)
+        if index < len(arr) and node.val == arr[index]:
+            if not node.left and not node.right:  # Leaf node
+                return index == len(arr) - 1
+            return dfs(node.left, index + 1) or dfs(node.right, index + 1)
+        return False
+
+    return dfs(root, 0)
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def isValidSequence(root: TreeNode, arr: list[int]) -> bool:
+    def dfs(node, index):
+        if not node:
+            return index == len(arr)
+        if index < len(arr) and node.val == arr[index]:
+            if not node.left and not node.right:  # Leaf node
+                return index == len(arr) - 1
+            return dfs(node.left, index + 1) or dfs(node.right, index + 1)
+        return False
+
+    return dfs(root, 0)
